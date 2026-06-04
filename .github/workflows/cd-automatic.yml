@@ -1,0 +1,40 @@
+name: Automatic Production Deployment (CD)
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm test
+      - name: Run security scan (simulated)
+        run: |
+          echo "Running security scan..."
+          echo "No critical vulnerabilities found"
+
+  deploy-to-production-automatic:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    environment: production-auto
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Automatic deployment to Production
+        run: |
+          echo "AUTOMATIC PRODUCTION DEPLOYMENT (CD)"
+          echo "Application version: $(git rev-parse --short HEAD)"
+          echo "Production deployment successful!"
+      - name: Post-deployment notification (simulated)
+        run: |
+          echo "Status: SUCCESS"
